@@ -6,4 +6,3 @@ public class ExportResult {
     //sobre lo que se ha exportado y si ha habido fallos (IO, conexión, etc)
 
 }
-//TODO commit test
