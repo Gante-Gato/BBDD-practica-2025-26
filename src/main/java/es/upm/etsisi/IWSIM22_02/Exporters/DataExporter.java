@@ -1,8 +1,11 @@
 package es.upm.etsisi.IWSIM22_02.Exporters;
 
+import java.sql.ResultSet;
+
 public interface DataExporter {
-
-    //TODO: esta clase y sus descendientes serían los encargados de recibir los resultados
-    //de una query y pasarlos al tipo de dato correspondiente
-
+    void export(ResultSet resultSet) throws Exception;
 }
+
+//Para estos dos tipos de Exporters realmente no hace falta una interfaz pero bueno
+//imaginé que habría sufuciente en común como para que tuviese sentido hacer una interfaz,
+//sobre to_do de cara a que pudiese haber más tipos de export a futuro (.txt, por ejemplo)
