@@ -34,7 +34,7 @@ public class Main {
                                 2. Make user medication query
                                 3. Export table
                                 0. Exit
-                                Choose option: """);
+                                Choose option:\s""");
 
             String option = scanner.nextLine().trim();
 
@@ -60,7 +60,10 @@ public class Main {
 
                 case "3":
                     if (connected) {
-                        decideFormat();
+                        String format = decideFormat();
+                        if(checkFileOverwrite(format)) {
+                            exportTable(format);
+                        }
                     } else {
                         System.out.println(MAKE_CONNECTION);
                     }
@@ -95,7 +98,7 @@ public class Main {
         connectionParameters[2] = "";
 
         String[] paramNames = new String[3];
-        paramNames[0] = "url";
+        paramNames[0] = "Database URL";
         paramNames[1] = "username";
         paramNames[2] = "password";
 
@@ -138,22 +141,25 @@ public class Main {
             try {
                 xmlExporter.export();
             } catch (Exception e) {
-                //Se ha quedado como Exception genérico porque si intentaba usar algun set de excepciones
+                //Se ha quedado como Exception genérico porque si intentaba usar algún set de excepciones
                 //concreto siempre me daba un error de compilación.
                 System.out.println(e.getMessage());
             }
         }
     }
 
-    private void decideFormat() {
-        System.out.println("In which format?\n");
+    private String decideFormat() {
         Scanner scanner = new Scanner(System.in);
-        String format = scanner.nextLine().trim().toLowerCase();
 
-        if (format.equalsIgnoreCase("csv") || format.equalsIgnoreCase("xml")) {
-            exportTable(format);
-        } else {
-            System.out.println("Invalid format, please use " +  VALID_FORMATS);
+        while (true) {
+            System.out.print("In which format? (csv/xml): ");
+            String format = scanner.nextLine().trim().toLowerCase();
+
+            if (format.equals("csv") || format.equals("xml")) {
+                return format;
+            } else {
+                System.out.println("Invalid format, please use " + VALID_FORMATS);
+            }
         }
     }
 
@@ -161,7 +167,7 @@ public class Main {
      * Comprueba si el archivo .CSV o .XML ya existe antes de sobreescribirlo. Si existe, le pregunta al usuario
      * si lo quiere sobreescribir.
      * @param format el formato del archivo que busca. Ambos se generan en el mismo sitio, pero solo checkea el que tenga el formato correspondiente
-     * @return variable booleana de si se ha permitido escritura.
+     * @return variable booleana respecto a que se ha permitido escritura.
      */
     public static boolean checkFileOverwrite(String format) {
         String path = "./src/main/resources/Medicine." + format;
@@ -172,7 +178,6 @@ public class Main {
             while (true) {
                 System.out.print("File already exists. Do you want to overwrite it? (y/n): ");
                 String answer = scanner.nextLine().trim().toLowerCase();
-
                 if (answer.equals("y")) {
                     return true;
                 } else if (answer.equals("n")) {
