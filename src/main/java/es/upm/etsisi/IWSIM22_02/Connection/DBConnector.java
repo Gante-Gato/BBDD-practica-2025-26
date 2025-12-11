@@ -10,8 +10,8 @@ import java.sql.SQLException;
 public class DBConnector {
 
     private String url;
-    private String user = "ROOT";
-    private String password = "";
+    private String user;
+    private String password;
     private Connection connection;
     private boolean connected;
 

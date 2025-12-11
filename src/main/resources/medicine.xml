@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<medicamentos>
+  <registro>
+    <Codigo_Medicamento>1</Codigo_Medicamento>
+    <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
+    <Marca_Medicamento></Marca_Medicamento>
+    <Nombre_Paciente>John Smith</Nombre_Paciente>
+    <Fecha_Prescripcion>15/01/2024</Fecha_Prescripcion>
+    <Nombre_Doctor>John Dorian</Nombre_Doctor>
+  </registro>
+  <registro>
+    <Codigo_Medicamento>1</Codigo_Medicamento>
+    <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
+    <Marca_Medicamento></Marca_Medicamento>
+    <Nombre_Paciente>John Smith</Nombre_Paciente>
+    <Fecha_Prescripcion>15/01/2021</Fecha_Prescripcion>
+    <Nombre_Doctor>John Dorian</Nombre_Doctor>
+  </registro>
+  <registro>
+    <Codigo_Medicamento>1</Codigo_Medicamento>
+    <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
+    <Marca_Medicamento></Marca_Medicamento>
+    <Nombre_Paciente>John Smith</Nombre_Paciente>
+    <Fecha_Prescripcion>24/4/2008</Fecha_Prescripcion>
+    <Nombre_Doctor>John Dorian</Nombre_Doctor>
+  </registro>
+  <registro>
+    <Codigo_Medicamento>1</Codigo_Medicamento>
+    <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
+    <Marca_Medicamento></Marca_Medicamento>
+    <Nombre_Paciente>John Smith</Nombre_Paciente>
+    <Fecha_Prescripcion>18/06/2024</Fecha_Prescripcion>
+    <Nombre_Doctor>Elliot Reid</Nombre_Doctor>
+  </registro>
+  <registro>
+    <Codigo_Medicamento>7</Codigo_Medicamento>
+    <Nombre_Medicamento>CardioPlus</Nombre_Medicamento>
+    <Marca_Medicamento>General Pharma</Marca_Medicamento>
+    <Nombre_Paciente>John Smith</Nombre_Paciente>
+    <Fecha_Prescripcion>15/01/2024</Fecha_Prescripcion>
+    <Nombre_Doctor>Christopher Turk</Nombre_Doctor>
+  </registro>
+</medicamentos>
