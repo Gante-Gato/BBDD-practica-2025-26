@@ -1,64 +1,73 @@
 package es.upm.etsisi.IWSIM22_02;
 
-import java.util.List;
+import es.upm.etsisi.IWSIM22_02.Connection.DBConnector;
+import es.upm.etsisi.IWSIM22_02.Exporters.CSVExporter;
+import es.upm.etsisi.IWSIM22_02.Exporters.XMLExporter;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
 
-    private ConfigLoader config;
-    private DatabaseConnector dbConnector;
-    private QueryExecutor queryExecutor;
-    private CsvExporter csvExporter;
-    private XmlExporter xmlExporter;
+    private final String VALID_FORMATS = "XML, CSV";
+    private final String MAKE_CONNECTION = "You are not connected to any database. Please make the connection first";
+    private final String SHUTDOWN = "Program shutting down";
+    private final String FAILED_CONNECTION = "There was an error connecting to the database.";
+    private static final String INVALID_INPUT_YES_NO = "Invalid input. Please answer 'y' (yes) or 'n' (no).";
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         new Main().LanzarMenu();
     }
 
     private void LanzarMenu() {
         Scanner scanner = new Scanner(System.in);
-
-        config = new ConfigLoader("config.properties");
-        dbConnector = new DatabaseConnector(
-                config.getDatabaseUrl(),
-                config.getDatabaseUser(),
-                config.getDatabasePassword()
-        );
-        queryExecutor = new QueryExecutor(dbConnector);
-        csvExporter = new CsvExporter();
-        xmlExporter = new XmlExporter();
-
         boolean running = true;
+        boolean connected = false;
 
         do {
-            System.out.println("\n--- MENU ---");
-            System.out.println("1. Test database connection");
-            System.out.println("2. List tables");
-            System.out.println("3. Export single table");
-            System.out.println("4. Export all tables");
-            System.out.println("0. Exit");
-            System.out.print("Choose option: ");
+            System.out.print("""
+                                \n--- MENU ---
+                                1. Make database connection
+                                2. Make user medication query
+                                3. Export table
+                                0. Exit
+                                Choose option: """);
 
             String option = scanner.nextLine().trim();
 
             switch (option) {
                 case "1":
-                    handleTestConnection();
+                    String[] connectionParams = new String[3];
+                    connectionParams = getParameters();
+                    DBConnector dbConnector = new DBConnector(connectionParams[0], connectionParams[1], connectionParams[2]);
+                    dbConnector.connect();
+                    connected = dbConnector.isConnected();
+                    if (!connected) {
+                        System.out.println(FAILED_CONNECTION);
+                    }
                     break;
 
                 case "2":
-                    handleListTables();
+                    if (connected){
+
+                    } else {
+                        System.out.println(MAKE_CONNECTION);
+                    }
                     break;
 
                 case "3":
-                    handleExportSingleTable(scanner);
-                    break;
-
-                case "4":
-                    handleExportAllTables();
+                    if (connected) {
+                        decideFormat();
+                    } else {
+                        System.out.println(MAKE_CONNECTION);
+                    }
                     break;
 
                 case "0":
+                    System.out.println(SHUTDOWN);
                     running = false;
                     break;
 
@@ -71,46 +80,109 @@ public class Main {
         scanner.close();
     }
 
-    private void handleTestConnection() {
-        if (dbConnector.testConnection()) {
-            System.out.println("Connection OK");
+
+    /**
+     * Le da al usuario la oportunidad de modificar los parámetros de conexión
+     * de la BBDD. Los defaults son los que aparecen predefinidos y son los que se usan,
+     * pero no era complicado añadir la opción de modificación por si acaso hubiese errores con ellos.
+     */
+    public static String[] getParameters() {
+        Scanner scanner = new Scanner(System.in);
+        boolean answered = false;
+        String[] connectionParameters = new String[3];
+        connectionParameters[0] = "jdbc:mysql://localhost:3306/hospital_management_system";
+        connectionParameters[1] = "root";
+        connectionParameters[2] = "";
+
+        String[] paramNames = new String[3];
+        paramNames[0] = "url";
+        paramNames[1] = "username";
+        paramNames[2] = "password";
+
+        while (!answered) {
+            System.out.print("Do you want to use the default connection? (y/n): ");
+            String answer = scanner.nextLine().trim().toLowerCase();
+            if (answer.equals("y")) {
+                answered = true;
+            } else if (answer.equals("n")) {
+                for (int i = 0; i < connectionParameters.length; i++) {
+                    System.out.print("Enter " + (paramNames[i]) + ": ");
+                    connectionParameters[i] = scanner.nextLine().trim();
+                }
+                answered = true;
+            } else {
+                System.out.println(INVALID_INPUT_YES_NO);
+            }
+        }
+
+        return connectionParameters;
+    }
+
+
+
+    private void exportTable(String format) {
+        System.out.println("Exporting: " + format);
+        //TODO diferenciar y añadir ResultSet
+        ResultSet resultSetFalsoParaQueCompile = null;
+
+
+        if (format.equalsIgnoreCase("csv")) {
+            CSVExporter csvExporter = new CSVExporter(resultSetFalsoParaQueCompile);
+            try {
+                csvExporter.export();
+            } catch (IOException | SQLException e) {
+                System.out.println(e.getMessage());
+            }
         } else {
-            System.out.println("Connection FAILED");
+            XMLExporter xmlExporter = new XMLExporter(resultSetFalsoParaQueCompile);
+            try {
+                xmlExporter.export();
+            } catch (Exception e) {
+                //Se ha quedado como Exception genérico porque si intentaba usar algun set de excepciones
+                //concreto siempre me daba un error de compilación.
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    private void handleListTables() {
-        List<String> tables = queryExecutor.getTableNames();
-        listTables(tables);
-    }
+    private void decideFormat() {
+        System.out.println("In which format?\n");
+        Scanner scanner = new Scanner(System.in);
+        String format = scanner.nextLine().trim().toLowerCase();
 
-    private void handleExportSingleTable(Scanner sc) {
-        System.out.print("Table name: ");
-        String table = sc.nextLine().trim();
-        exportSingleTable(table);
-    }
-
-    private void handleExportAllTables() {
-        exportAllTables();
-    }
-
-    // Stubs (rellena con tu lógica)
-
-    private void listTables(List<String> tables) {
-        System.out.println("\nTables:");
-        for (String t : tables) {
-            System.out.println(" - " + t);
+        if (format.equalsIgnoreCase("csv") || format.equalsIgnoreCase("xml")) {
+            exportTable(format);
+        } else {
+            System.out.println("Invalid format, please use " +  VALID_FORMATS);
         }
     }
 
-    private void exportSingleTable(String table) {
-        System.out.println("Exporting: " + table);
-        // Implementación real aquí.
-    }
+    /**
+     * Comprueba si el archivo .CSV o .XML ya existe antes de sobreescribirlo. Si existe, le pregunta al usuario
+     * si lo quiere sobreescribir.
+     * @param format el formato del archivo que busca. Ambos se generan en el mismo sitio, pero solo checkea el que tenga el formato correspondiente
+     * @return variable booleana de si se ha permitido escritura.
+     */
+    public static boolean checkFileOverwrite(String format) {
+        String path = "./src/main/resources/Medicine." + format;
+        File file = new File(path);
+        Scanner scanner = new Scanner(System.in);
 
-    private void exportAllTables() {
-        System.out.println("Exporting all tables...");
-        // Implementación real aquí.
+        if (file.exists()) {
+            while (true) {
+                System.out.print("File already exists. Do you want to overwrite it? (y/n): ");
+                String answer = scanner.nextLine().trim().toLowerCase();
+
+                if (answer.equals("y")) {
+                    return true;
+                } else if (answer.equals("n")) {
+                    return false;
+                } else {
+                    System.out.println(INVALID_INPUT_YES_NO);
+                }
+            }
+        } else {
+            return true;
+        }
     }
 }
-
