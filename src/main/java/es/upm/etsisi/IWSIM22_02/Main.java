@@ -131,13 +131,14 @@ public class Main {
         System.out.println("Exporting filtered data to: " + format.toUpperCase());
 
         Connection conn = dbConnector.getConnection();
-        // SQL Injection Prevention: Usamos ? como placeholder [cite: 312, 316]
+
+        // Esto evita inyecciones SQL
         String query = "SELECT * FROM vista_medicamentos_prescritos WHERE Nombre_Paciente = ?";
 
         // Try-with-resources asegura que el ResultSet y Statement se cierren
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            // Asignamos el parámetro de forma segura [cite: 318]
+
             pstmt.setString(1, currentPatientFilter);
 
             try (ResultSet resultSet = pstmt.executeQuery()) {

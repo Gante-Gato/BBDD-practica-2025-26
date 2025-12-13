@@ -20,10 +20,7 @@ public class XMLExporter {
                 FileOutputStream fileOutputStream = new FileOutputStream(XML_PATH);
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8))
         ) {
-            //El encabezado del XML. Según ChatGPT hay un XMLWriter que puede hacérlo solo
-            //pero no recuerdo haberlo visto en clase así que no quería usarlo por si acaso.
             bufferedWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            //encodearlo en UTF-8 haceque las tildes y las eñe no revienten el programa
             bufferedWriter.newLine();
             bufferedWriter.write("<medicamentos>");
             bufferedWriter.newLine();
@@ -48,7 +45,7 @@ public class XMLExporter {
         }
     }
 
-    private String escapeXML(String text) { //escapa los caracteres reservados
+    private String escapeXML(String text) {
         return text
                 .replace("&", "&amp;")
                 .replace("<", "&lt;")
