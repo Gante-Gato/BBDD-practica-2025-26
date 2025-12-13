@@ -19,6 +19,7 @@ public class Main {
     private final String MAKE_QUERY_FIRST = "Please define the patient filter in Option 2 first.";
     private final String SHUTDOWN = "Program shutting down";
     private final String FAILED_CONNECTION = "There was an error connecting to the database.";
+    private final String SUCCESFUL_CONNECTION = "Connection established successfully.";
     private static final String INVALID_INPUT_YES_NO = "Invalid input. Please answer 'y' (yes) or 'n' (no).";
 
     // Variable para mantener el filtro entre la opción 2 y la 3
@@ -54,7 +55,7 @@ public class Main {
                     if (!connected) {
                         System.out.println(FAILED_CONNECTION);
                     } else {
-                        System.out.println("Connection established successfully.");
+                        System.out.println(SUCCESFUL_CONNECTION);
                     }
                     break;
 
