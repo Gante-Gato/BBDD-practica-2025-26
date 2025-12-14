@@ -21,6 +21,7 @@ public class Main {
     private final String FAILED_CONNECTION = "There was an error connecting to the database.";
     private final String SUCCESFUL_CONNECTION = "Connection established successfully.";
     private static final String INVALID_INPUT_YES_NO = "Invalid input. Please answer 'y' (yes) or 'n' (no).";
+    private final String ALREADY_CONNECTED = "You are already connected to a database.";
 
     // Variable para mantener el filtro entre la opción 2 y la 3
     private String currentPatientFilter = null;
@@ -48,15 +49,20 @@ public class Main {
 
             switch (option) {
                 case "1":
-                    String[] connectionParams = getParameters();
-                    dbConnector = new DBConnector(connectionParams[0], connectionParams[1], connectionParams[2]);
-                    dbConnector.connect();
-                    connected = dbConnector.isConnected();
-                    if (!connected) {
-                        System.out.println(FAILED_CONNECTION);
+                    if (!connected){
+                        String[] connectionParams = getParameters();
+                        dbConnector = new DBConnector(connectionParams[0], connectionParams[1], connectionParams[2]);
+                        dbConnector.connect();
+                        connected = dbConnector.isConnected();
+                        if (!connected) {
+                            System.out.println(FAILED_CONNECTION);
+                        } else {
+                            System.out.println(SUCCESFUL_CONNECTION);
+                        }
                     } else {
-                        System.out.println(SUCCESFUL_CONNECTION);
+                        System.out.println(ALREADY_CONNECTED);
                     }
+
                     break;
 
                 case "2":
@@ -115,9 +121,7 @@ public class Main {
         connectionParameters[0] = "jdbc:mysql://localhost:3306/hospital_management_system";
         connectionParameters[1] = "root"; // Usamos el usuario que creamos antes
         connectionParameters[2] = "";
-
         String[] paramNames = {"Database URL", "username", "password"};
-
         while (!answered) {
             System.out.print("Do you want to use the default connection? (y/n): ");
             String answer = scanner.nextLine().trim().toLowerCase();
@@ -169,7 +173,6 @@ public class Main {
 
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
-            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("IO Error: " + e.getMessage());
         } catch (Exception e) {
