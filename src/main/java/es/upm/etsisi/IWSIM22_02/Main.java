@@ -61,9 +61,17 @@ public class Main {
 
                 case "2":
                     if (connected){
-                        System.out.print("Enter Patient Name to filter by: ");
-                        currentPatientFilter = scanner.nextLine().trim();
-                        System.out.println("Filter set to: " + currentPatientFilter);
+                        System.out.print("Enter Patient SSN (ID) to filter by: ");
+                        String input = scanner.nextLine().trim();
+                        // Validación simple para asegurar que sea un número
+                        try {
+                            Integer.parseInt(input);
+                            currentPatientFilter = input;
+                            System.out.println("Filter set to ID: " + currentPatientFilter);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid SSN. Please enter a numeric value.");
+                            currentPatientFilter = null;
+                        }
                     } else {
                         System.out.println(MAKE_CONNECTION);
                     }
@@ -133,20 +141,18 @@ public class Main {
 
         Connection conn = dbConnector.getConnection();
 
-        // Esto evita inyecciones SQL
-        String query = "SELECT * FROM vista_medicamentos_prescritos WHERE Nombre_Paciente = ?";
+        // Evitamos inyecciones SQL (se ha cambiado a ID_Paciente)
+        String query = "SELECT * FROM vista_medicamentos_prescritos WHERE ID_Paciente = ?";
 
-        // Try-with-resources asegura que el ResultSet y Statement se cierren
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-
-            pstmt.setString(1, currentPatientFilter);
+            int patientId = Integer.parseInt(currentPatientFilter);
+            pstmt.setInt(1, patientId);
 
             try (ResultSet resultSet = pstmt.executeQuery()) {
 
-                // Verificamos si hay datos antes de exportar
                 if (!resultSet.isBeforeFirst()) {
-                    System.out.println("No records found for patient: " + currentPatientFilter);
+                    System.out.println("No records found for patient SSN: " + currentPatientFilter);
                     return;
                 }
 

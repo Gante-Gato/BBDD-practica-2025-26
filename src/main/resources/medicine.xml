@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <medicamentos>
   <registro>
+    <ID_Paciente>100000001</ID_Paciente>
     <Codigo_Medicamento>1</Codigo_Medicamento>
     <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
     <Marca_Medicamento></Marca_Medicamento>
@@ -9,6 +10,7 @@
     <Nombre_Doctor>John Dorian</Nombre_Doctor>
   </registro>
   <registro>
+    <ID_Paciente>100000001</ID_Paciente>
     <Codigo_Medicamento>1</Codigo_Medicamento>
     <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
     <Marca_Medicamento></Marca_Medicamento>
@@ -17,6 +19,7 @@
     <Nombre_Doctor>John Dorian</Nombre_Doctor>
   </registro>
   <registro>
+    <ID_Paciente>100000001</ID_Paciente>
     <Codigo_Medicamento>1</Codigo_Medicamento>
     <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
     <Marca_Medicamento></Marca_Medicamento>
@@ -25,6 +28,7 @@
     <Nombre_Doctor>John Dorian</Nombre_Doctor>
   </registro>
   <registro>
+    <ID_Paciente>100000001</ID_Paciente>
     <Codigo_Medicamento>1</Codigo_Medicamento>
     <Nombre_Medicamento>Procrastin-X</Nombre_Medicamento>
     <Marca_Medicamento></Marca_Medicamento>
@@ -33,6 +37,7 @@
     <Nombre_Doctor>Elliot Reid</Nombre_Doctor>
   </registro>
   <registro>
+    <ID_Paciente>100000001</ID_Paciente>
     <Codigo_Medicamento>7</Codigo_Medicamento>
     <Nombre_Medicamento>CardioPlus</Nombre_Medicamento>
     <Marca_Medicamento>General Pharma</Marca_Medicamento>
