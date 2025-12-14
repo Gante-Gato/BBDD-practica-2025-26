@@ -33,9 +33,8 @@ public class DBConnector {
         try {
             connection = DriverManager.getConnection(url, user, password);
             connected = true;
-        } catch (SQLException e) {
+        } catch (Exception e) { //catch todas las excepciones, puesto que puede tirar alguna más que SQLException
             connected = false;
-            e.printStackTrace();
         }
     }
 
